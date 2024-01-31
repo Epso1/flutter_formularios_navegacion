@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widgets_comarques/main.dart';
 import 'package:flutter_widgets_comarques/constants.dart';
+import 'package:flutter_widgets_comarques/comarcas.dart';
+import 'package:flutter_widgets_comarques/infocomarca.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -16,18 +18,38 @@ class InfoClima extends StatefulWidget {
 }
 
 class _InfoClimaState extends State<InfoClima> {
+  int _selectedIndex = 1;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (index == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => InfoClima(title: widget.title)),
+        );
+      }else if(index==0){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => InfoComarca(title: widget.title)),
+        );
+
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Constants.myCustomColor2,
-          title: const Center(
-            child: Text('La Safor',
-                style: TextStyle(
-                    color: Constants.myCustomColor,
-                    fontFamily: 'Blacklist',
-                    fontSize: 30)),
-          ),
+          title: Text(widget.title,
+              style: const TextStyle(
+                  color: Constants.myCustomColor,
+                  fontFamily: 'Blacklist',
+                  fontSize: 30)),
         ),
         body: Container(
           child: SingleChildScrollView(
@@ -86,10 +108,10 @@ class _InfoClimaState extends State<InfoClima> {
                 ),
                 Container(
                   margin: const EdgeInsets.all(8.0),
-                  child: FutureBuilder<List<Comarca>>(
-                    future: getComarcas('València'),
+                  child: FutureBuilder<Comarca>(
+                    future: getInfoComarca(widget.title),
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<Comarca>> snapshot) {
+                        AsyncSnapshot<Comarca> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator();
                       } else if (snapshot.hasError) {
@@ -110,7 +132,7 @@ class _InfoClimaState extends State<InfoClima> {
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
-                                '${snapshot.data![Constants.idComarca].poblacio}',
+                                '${snapshot.data!.poblacio}',
                                 style: const TextStyle(
                                     color: Constants.myCustomColor,
                                     fontSize: 24),
@@ -124,10 +146,10 @@ class _InfoClimaState extends State<InfoClima> {
                 ),
                 Container(
                   margin: const EdgeInsets.all(8.0),
-                  child: FutureBuilder<List<Comarca>>(
-                    future: getComarcas('València'),
+                  child: FutureBuilder<Comarca>(
+                    future: getInfoComarca(widget.title),
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<Comarca>> snapshot) {
+                        AsyncSnapshot<Comarca> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator();
                       } else if (snapshot.hasError) {
@@ -148,7 +170,7 @@ class _InfoClimaState extends State<InfoClima> {
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
-                                '${snapshot.data![Constants.idComarca].latitud}',
+                                '${snapshot.data!.latitud}',
                                 style: const TextStyle(
                                     color: Constants.myCustomColor,
                                     fontSize: 24),
@@ -162,10 +184,10 @@ class _InfoClimaState extends State<InfoClima> {
                 ),
                 Container(
                   margin: const EdgeInsets.all(8.0),
-                  child: FutureBuilder<List<Comarca>>(
-                    future: getComarcas('València'),
+                  child: FutureBuilder<Comarca>(
+                    future: getInfoComarca(widget.title),
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<Comarca>> snapshot) {
+                        AsyncSnapshot<Comarca> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator();
                       } else if (snapshot.hasError) {
@@ -186,7 +208,7 @@ class _InfoClimaState extends State<InfoClima> {
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
-                                '${snapshot.data![Constants.idComarca].longitud}',
+                                '${snapshot.data!.longitud}',
                                 style: const TextStyle(
                                     color: Constants.myCustomColor,
                                     fontSize: 24),
@@ -200,32 +222,32 @@ class _InfoClimaState extends State<InfoClima> {
                 ),
                 Container()
               ])),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.info),
+              label: 'La Comarca',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.sunny),
+              label: 'Informació i oratge',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.amber[800],
+          onTap: _onItemTapped,
         ));
   }
 }
 
-Future<List<Comarca>> getComarcas(String provincia) async {
+Future<Comarca> getInfoComarca(String comarca) async {
   final response = await http.get(Uri.parse(
-      'https://node-comarques-rest-server-production.up.railway.app/api/comarques/$provincia'));
+      'https://node-comarques-rest-server-production.up.railway.app/api/comarques/infoComarca/$comarca'));
 
   if (response.statusCode == 200) {
-    final List<String> comarcasList =
-        List<String>.from(jsonDecode(response.body));
-    List<Comarca> comarcas = [];
-
-    for (String comarca in comarcasList) {
-      final responseComarca = await http.get(Uri.parse(
-          'https://node-comarques-rest-server-production.up.railway.app/api/comarques/infoComarca/$comarca'));
-
-      if (responseComarca.statusCode == 200) {
-        comarcas.add(Comarca.fromJSON(jsonDecode(responseComarca.body)));
-      } else {
-        throw Exception('Failed to load comarca info');
-      }
-    }
-
-    return comarcas;
+    return Comarca.fromJSON(jsonDecode(response.body));
   } else {
-    throw Exception('Failed to load comarcas');
+    throw Exception('Failed to load comarca info');
   }
 }

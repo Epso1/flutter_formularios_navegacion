@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Provincias(title: 'Les comarques de la comunitat'),
+      home: const HomePage(title: 'Les comarques de la comunitat'),
     );
   }
 }

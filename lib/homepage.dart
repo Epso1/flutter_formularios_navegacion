@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widgets_comarques/constants.dart';
-
+import 'package:flutter_widgets_comarques/provincias.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
 
@@ -11,6 +11,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  Map<String, String>? userData;
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,6 +83,77 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                    Container(
+                      margin: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Provincias(title: 'Províncies')),
+                              );
+                            },
+                            child: const Text('Login'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Registre'),
+                                    content: Column(
+                                      children: <Widget>[
+                                        TextFormField(
+                                          controller: _usernameController,
+                                          decoration: const InputDecoration(
+                                            labelText: "Nom d'usuari",
+                                            prefixIcon: Icon(Icons.person),
+                                            border: OutlineInputBorder(),
+                                          ),
+                                        ),
+                                        SizedBox(height: 10), // Espacio entre los campos
+                                        TextFormField(
+                                          controller: _passwordController,
+                                          decoration: const InputDecoration(
+                                            labelText: "Password",
+                                            prefixIcon: Icon(Icons.lock),
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          obscureText: true, // Oculta la contraseña
+                                        ),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Cancel·lar'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text('Registrar'),
+                                        onPressed: () {
+                                          userData = {
+                                            'username': _usernameController.text,
+                                            'password': _passwordController.text,
+                                          };
+                                          print(userData); // Imprime el mapa para verificar los datos
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: const Text('Register'),
+                          ),
+                        ],
+                      )
+                    )
                   ],
                 ),
               ),

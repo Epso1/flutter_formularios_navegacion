@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widgets_comarques/infocomarca.dart';
 import 'package:flutter_widgets_comarques/main.dart';
 import 'package:flutter_widgets_comarques/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class Comarcas extends StatefulWidget {
-  const Comarcas({super.key, required this.title});
-
   final String title;
+  final String provincia;
+
+  const Comarcas({super.key, required this.title, required this.provincia});
 
   @override
   State<Comarcas> createState() => _ComarcasState();
@@ -20,12 +21,11 @@ class _ComarcasState extends State<Comarcas> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Constants.myCustomColor2,
-        title: const Text(
-            'Comarques de València',
-            style: TextStyle(color:Constants.myCustomColor,
+        title: Text(widget.title,
+            style: const TextStyle(
+                color: Constants.myCustomColor,
                 fontFamily: 'Blacklist',
-                fontSize: 30)
-        ),
+                fontSize: 30)),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -42,7 +42,7 @@ class _ComarcasState extends State<Comarcas> {
               child: Container(
                 margin: const EdgeInsets.all(8.0),
                 child: FutureBuilder<List<Comarca>>(
-                  future: getComarcas('València'),
+                  future: getComarcas(widget.provincia),
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Comarca>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,44 +53,54 @@ class _ComarcasState extends State<Comarcas> {
                       return ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-
-                          return Card(
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Stack(
-                              alignment: Alignment.bottomLeft,
-                              children: <Widget>[
-                                Ink.image(
-                                  image: NetworkImage(
-                                      snapshot.data![index].img ?? ''),
-                                  fit: BoxFit.cover,
-                                  height: 150.0,
-
+                          return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => InfoComarca(
+                                              title:
+                                                  snapshot.data![index].comarca,
+                                            )));
+                              },
+                              child: Card(
+                                clipBehavior: Clip.antiAlias,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10.0),
-                                  child: Text(
-                                    snapshot.data![index].comarca,
-                                    style: const TextStyle(
-                                      fontFamily: 'Blacklist',
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white,
-                                      shadows: <Shadow>[
-                                        Shadow(
-                                          offset: Offset(1.0, 1.0),
-                                          blurRadius: 3.0,
-                                          color: Color.fromARGB(255, 0, 0, 0),
-                                        ),
-                                      ],
+                                child: Stack(
+                                  alignment: Alignment.bottomLeft,
+                                  children: <Widget>[
+                                    Ink.image(
+                                      image: NetworkImage(
+                                          snapshot.data![index].img ?? ''),
+                                      fit: BoxFit.cover,
+                                      height: 150.0,
                                     ),
-                                  ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Text(
+                                        snapshot.data![index].comarca,
+                                        style: const TextStyle(
+                                          fontFamily: 'Blacklist',
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.white,
+                                          shadows: <Shadow>[
+                                            Shadow(
+                                              offset: Offset(1.0, 1.0),
+                                              blurRadius: 3.0,
+                                              color:
+                                                  Color.fromARGB(255, 0, 0, 0),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          );
+                              ));
                         },
                       );
                     }

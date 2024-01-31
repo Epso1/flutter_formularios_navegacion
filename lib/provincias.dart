@@ -20,155 +20,177 @@ class _ProvinciasState extends State<Provincias> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          opacity: 0.25,
-          image: AssetImage("assets/images/travel_background.jpg"),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(top: 50.0, bottom: 10),
-              width: circleSize,
-              height: circleSize,
-              child: FutureBuilder<Provincia>(
-                future: getProvincia('Castelló'),
-                builder:
-                    (BuildContext context, AsyncSnapshot<Provincia> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Comarcas(
-                                    title: 'Comarques de Castelló')),
-                          );
-                        },
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(snapshot.data!.img),
-                              minRadius: circleSize,
-                            ),
-                            Text(
-                              snapshot.data!.provincia,
-                              style: const TextStyle(
-                                fontFamily: 'Blacklist',
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                shadows: <Shadow>[
-                                  Shadow(
-                                    offset: Offset(2.0, 2.0),
-                                    color: Color.fromARGB(255, 0, 0, 0),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              opacity: 0.25,
+              image: AssetImage("assets/images/travel_background.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.only(top: 50.0, bottom: 10),
+                  width: circleSize,
+                  height: circleSize,
+                  child: FutureBuilder<Provincia>(
+                    future: getProvincia('Castelló'),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<Provincia> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Comarcas(
+                                        title: 'Comarques de Castelló', provincia: 'Castelló'))
+                              );
+                            },
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(snapshot.data!.img),
+                                  minRadius: circleSize,
+                                ),
+                                Text(
+                                  snapshot.data!.provincia,
+                                  style: const TextStyle(
+                                    fontFamily: 'Blacklist',
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        offset: Offset(2.0, 2.0),
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ));
-                  } // else
-                }, // builder
-              ),
+                                ),
+                              ],
+                            ));
+                      } // else
+                    }, // builder
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(8.0),
+                  width: circleSize,
+                  height: circleSize,
+                  child: FutureBuilder<Provincia>(
+                    future: getProvincia('València'),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<Provincia> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Comarcas(
+                                        title: 'Comarques de València', provincia: 'València',)
+                                ),
+                              );
+                            },
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(snapshot.data!.img),
+                                  minRadius: circleSize,
+                                ),
+                                Text(
+                                  snapshot.data!.provincia,
+                                  style: const TextStyle(
+                                    fontFamily: 'Blacklist',
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        offset: Offset(2.0, 2.0),
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                        );
+                      } // else
+                    }, // builder
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10.0, bottom: 50),
+                  width: circleSize,
+                  height: circleSize,
+                  child: FutureBuilder<Provincia>(
+                    future: getProvincia('Alacant'),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<Provincia> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Comarcas(
+                                        title: 'Comarques d\'Alacant', provincia: 'Alacant',)
+                                ),
+                              );
+                            },
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(snapshot.data!.img),
+                                  minRadius: circleSize,
+                                ),
+                                Text(
+                                  snapshot.data!.provincia,
+                                  style: const TextStyle(
+                                    fontFamily: 'Blacklist',
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        offset: Offset(2.0, 2.0),
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                        );
+                      } // else
+                    }, // builder
+                  ),
+                ),
+                Container()
+              ],
             ),
-            Container(
-              margin: const EdgeInsets.all(8.0),
-              width: circleSize,
-              height: circleSize,
-              child: FutureBuilder<Provincia>(
-                future: getProvincia('València'),
-                builder:
-                    (BuildContext context, AsyncSnapshot<Provincia> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return Stack(
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(snapshot.data!.img),
-                          minRadius: circleSize,
-                        ),
-                        Text(
-                          snapshot.data!.provincia,
-                          style: const TextStyle(
-                            fontFamily: 'Blacklist',
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: <Shadow>[
-                              Shadow(
-                                offset: Offset(2.0, 2.0),
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  } // else
-                }, // builder
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10.0, bottom: 50),
-              width: circleSize,
-              height: circleSize,
-              child: FutureBuilder<Provincia>(
-                future: getProvincia('Alacant'),
-                builder:
-                    (BuildContext context, AsyncSnapshot<Provincia> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return Stack(
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(snapshot.data!.img),
-                          minRadius: circleSize,
-                        ),
-                        Text(
-                          snapshot.data!.provincia,
-                          style: const TextStyle(
-                            fontFamily: 'Blacklist',
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: <Shadow>[
-                              Shadow(
-                                offset: Offset(2.0, 2.0),
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  } // else
-                }, // builder
-              ),
-            ),
-            Container()
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
 
